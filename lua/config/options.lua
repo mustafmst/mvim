@@ -7,4 +7,4 @@ opt.colorcolumn = "120"
 opt.tabstop = 2
 opt.softtabstop = 2
 opt.shiftwidth = 2
-opt.spelllang = {"en", "pl"}
+opt.spelllang = { "en", "pl" }

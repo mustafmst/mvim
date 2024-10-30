@@ -4,7 +4,7 @@ return {
 	config = function()
 		local configs = require("nvim-treesitter.configs")
 		opt = {
-			ensure_installed = {"lua",},
+			ensure_installed = { "lua", },
 			highlight = {
 				enable = true,
 			},
