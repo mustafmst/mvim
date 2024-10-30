@@ -39,3 +39,6 @@ require("config.options")
 
 -- Set theme (should be downloaded by now via lazy)
 vim.cmd("colorscheme eldritch")
+
+-- Load global keymaps
+require("config.keymaps")
