@@ -1,3 +1,11 @@
+local lsp_config_module = require('config.lsp')
+
+local lsps = {}
+
+for k, _ in pairs(lsp_config_module) do
+	table.insert(lsps, k)
+end
+
 return {
 	{
 		"williamboman/mason.nvim",
@@ -9,49 +17,16 @@ return {
 		"williamboman/mason-lspconfig.nvim",
 		config = function()
 			require("mason-lspconfig").setup({
-				ensure_installed = {
-					"lua_ls",
-				},
+				ensure_installed = lsps,
 			})
 		end,
 	},
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			local lspconfig = require('lspconfig')
-			require 'lspconfig'.lua_ls.setup {
-				on_init = function(client)
-					if client.workspace_folders then
-						local path = client.workspace_folders[1].name
-						if vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc') then
-							return
-						end
-					end
-
-					client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
-						runtime = {
-							-- Tell the language server which version of Lua you're using
-							-- (most likely LuaJIT in the case of Neovim)
-							version = 'LuaJIT'
-						},
-						-- Make the server aware of Neovim runtime files
-						workspace = {
-							checkThirdParty = false,
-							library = {
-								vim.env.VIMRUNTIME
-								-- Depending on the usage, you might want to add additional paths here.
-								-- "${3rd}/luv/library"
-								-- "${3rd}/busted/library",
-							}
-							-- or pull in all of 'runtimepath'. NOTE: this is a lot slower and will cause issues when working on your own configuration (see https://github.com/neovim/nvim-lspconfig/issues/3189)
-							-- library = vim.api.nvim_get_runtime_file("", true)
-						}
-					})
-				end,
-				settings = {
-					Lua = {}
-				}
-			}
+			for _, v in pairs(lsp_config_module) do
+				v.setup_lsp()
+			end
 		end,
 		keys = {
 			{ "<leader>cl", "<cmd>LspInfo<cr>",          desc = "Lsp Info" },

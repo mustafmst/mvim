@@ -3,12 +3,14 @@ return {
 	config = function()
 		local null_ls = require("null-ls")
 		local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+		local sources = { null_ls.builtins.completion.spell, }
+		local lsp_modules = require('config.lsp')
+		for _, v in pairs(lsp_modules) do
+			sources = v.add_null_ls_sources(sources)
+		end
 
 		null_ls.setup({
-			sources = {
-				null_ls.builtins.formatting.stylua,
-				null_ls.builtins.completion.spell,
-			},
+			sources = sources,
 			-- you can reuse a shared lspconfig on_attach callback here
 			on_attach = function(client, bufnr)
 				if client.supports_method("textDocument/formatting") then
@@ -17,8 +19,6 @@ return {
 						group = augroup,
 						buffer = bufnr,
 						callback = function()
-							-- on 0.8, you should use vim.lsp.buf.format({ bufnr = bufnr }) instead
-							-- on later neovim version, you should use vim.lsp.buf.format({ async = false }) instead
 							vim.lsp.buf.format({ async = false })
 						end,
 					})

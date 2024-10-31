@@ -3,7 +3,7 @@ local opt = vim.opt
 
 opt.number = true
 opt.relativenumber = true
-opt.colorcolumn = "120"
+-- opt.colorcolumn = "120"
 opt.tabstop = 2
 opt.softtabstop = 2
 opt.shiftwidth = 2
